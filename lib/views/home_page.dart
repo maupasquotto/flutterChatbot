@@ -67,7 +67,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _dialogFlowRequest({String query}) async {
+    // Adiciona uma mensagem temporária na lista
+    _addMessage(
+        name: 'Professor',
+        text: 'Escrevendo...',
+        type: ChatMessageType.received);
 
+    // Faz a autenticação com o serviço, envia a mensagem e recebe uma resposta da Intent
+    AuthGoogle authGoogle = await AuthGoogle(fileJson: "assets/credentials.json").build();
+    Dialogflow dialogflow = Dialogflow(authGoogle: authGoogle, language: "pt-BR");
+    AIResponse response = await dialogflow.detectIntent(query);
+
+    // remove a mensagem temporária
+    setState(() {
+      _messageList.removeAt(0);
+    });
+
+    // adiciona a mensagem com a resposta do DialogFlow
+    _addMessage(
+        name: 'Professor',
+        text: response.getMessage() ?? '',
+        type: ChatMessageType.received);
   }
 
   // Campo para escrever a msg
