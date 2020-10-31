@@ -97,6 +97,12 @@ class _HomePageState extends State<HomePage> {
     return new Flexible(
       child: new TextField(
         controller: _controllerText,
+        autofocus: true,
+        onSubmitted: (value) {
+          if (_controllerText.text.isNotEmpty) {
+            _sendMessage(text: _controllerText.text);
+          }
+        },
         decoration: new InputDecoration.collapsed(
           hintText: "Enviar menssagem"
         ),
