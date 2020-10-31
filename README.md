@@ -7,7 +7,7 @@
 This project was created for the intent of getting to know the tech.
 This chat bot connects to a dialog flow API so it can answer all your questions.
 
-##Screenshots
+## Screenshots
 
 ![SS1](./screenshots/ss1.png)
 ![SS2](./screenshots/ss2.png)
