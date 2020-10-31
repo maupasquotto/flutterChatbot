@@ -11,6 +11,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _messageList = <ChatMessage>[];
   final _controllerText = new TextEditingController();
+  final _userName = "Maurício de Castro Pasquotto";
+  final _botName = "Bot";
 
   @override
   void dispose() {
@@ -22,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Text('Chatbot - Professor'),
+        title: Text('Chatbot'),
       ),
       body: Column(
         children: <Widget>[
@@ -49,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   // Envia a msg com padrão da direita
   void _sendMessage({String text}) {
     _controllerText.clear();
-    _addMessage(name: 'Mauricio de Castro Pasquotto', text: text, type: ChatMessageType.sent);
+    _addMessage(name: _userName, text: text, type: ChatMessageType.sent);
   }
 
   // Adiciona uma menssagem na lista de menssagens
@@ -69,13 +71,13 @@ class _HomePageState extends State<HomePage> {
   Future _dialogFlowRequest({String query}) async {
     // Adiciona uma mensagem temporária na lista
     _addMessage(
-        name: 'Professor',
+        name: _botName,
         text: 'Escrevendo...',
         type: ChatMessageType.received);
 
     // Faz a autenticação com o serviço, envia a mensagem e recebe uma resposta da Intent
     AuthGoogle authGoogle = await AuthGoogle(fileJson: "assets/credentials.json").build();
-    Dialogflow dialogflow = Dialogflow(authGoogle: authGoogle, language: "pt-BR");
+    Dialogflow dialogflow = Dialogflow(authGoogle: authGoogle, language: Language.portugueseBrazilian);
     AIResponse response = await dialogflow.detectIntent(query);
 
     // remove a mensagem temporária
@@ -85,7 +87,7 @@ class _HomePageState extends State<HomePage> {
 
     // adiciona a mensagem com a resposta do DialogFlow
     _addMessage(
-        name: 'Professor',
+        name: _botName,
         text: response.getMessage() ?? '',
         type: ChatMessageType.received);
   }
@@ -119,15 +121,18 @@ class _HomePageState extends State<HomePage> {
 
   // Montar a linha com o campo de texto  e o btn de envio
   Widget _buildUserInput() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: new Row(
-        children: <Widget>[
-          _buildTextField(),
-          _buildSendButton()
-        ],
-      ),
+    return SafeArea( // for round corners
+        minimum: const EdgeInsets.all(16.0),
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: new Row(
+            children: <Widget>[
+              _buildTextField(),
+              _buildSendButton()
+            ],
+          ),
+        )
     );
   }
 }
